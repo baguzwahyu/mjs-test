@@ -8,4 +8,7 @@ https://mjs.baguswp.com/
 email: admin@gmail.com
 pass: 123456
 
-![sample](./images.png "sample")
+![sample](./ss/login.png "sample")
+![sample](./ss/product.png "sample")
+![sample](./ss/transaksi.png "sample")
+![sample](./ss/detail.png "sample")
