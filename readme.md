@@ -1,0 +1,3 @@
+- Composer update
+- migrate
+- db:seed
