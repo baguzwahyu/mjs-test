@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','product')
+@section('title','')
 @section('content')
 
 @include('admin.includes.errors')

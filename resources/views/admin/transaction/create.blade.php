@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Transaksi')
+@section('title','')
 @section('content')
 
 @include('admin.includes.errors')
