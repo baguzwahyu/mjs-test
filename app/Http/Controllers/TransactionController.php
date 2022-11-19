@@ -93,7 +93,7 @@ class TransactionController extends Controller
         }else{
             $totalStock = $getProductStock->stock - $request->amount;
         }
-        $post = Transaction::create([
+        $transaction = Transaction::create([
             'date'        => $request->date,
             'product_id'  => $request->product_id,
             'type'        => $request->type,
@@ -101,12 +101,12 @@ class TransactionController extends Controller
             'amount'      => $request->amount,
             'total_stock'  => $totalStock,
         ]);
-        if($post){
-            $product = Product::find($post->product_id);
+        if($transaction){
+            $product = Product::find($transaction->product_id);
             $product->stock = $totalStock;
             $product->save();
         }
-        // Session::flash('success', 'Berhasil di tambahkan');
+        Session::flash('success', 'Data Berhasil di tambahkan');
         return redirect()->route('transaction.index');
     }
 
@@ -127,9 +127,11 @@ class TransactionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+        public function edit($id)
     {
-        //
+        $products = Product::all();
+        $data = Transaction::find($id);
+        return view('admin.transaction.edit', compact('data','products'));
     }
 
     /**
@@ -141,7 +143,31 @@ class TransactionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'date'       => 'required',
+            'product_id' => 'required',
+            'price'      => 'required',
+            'amount'     => 'required',
+        ]); 
+        $getProductStock = Product::where('id', $request->product_id)->first();
+        if($request->type == 1){
+            $totalStock = $getProductStock->stock + $request->amount;
+        }else{
+            $totalStock = $getProductStock->stock - $request->amount;
+        }
+        $transaction = Transaction::find($id);
+        $transaction->date       = $request->date;
+        $transaction->product_id = $request->product_id;
+        $transaction->price      = $request->price;
+        $transaction->amount     = $request->amount;
+        $transaction->save();
+        if($transaction){
+            $product = Product::find($transaction->product_id);
+            $product->stock = $totalStock;
+            $product->save();
+        }
+        Session::flash('success', 'Data Berhasil di update');
+        return redirect()->route('transaction.index');
     }
 
     /**
@@ -152,6 +178,9 @@ class TransactionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $transaction = Transaction::findOrFail($id);
+        $transaction->delete();
+        Session::flash('success', 'Data Berhasil di hapus');
+        return redirect()->back();
     }
 }
